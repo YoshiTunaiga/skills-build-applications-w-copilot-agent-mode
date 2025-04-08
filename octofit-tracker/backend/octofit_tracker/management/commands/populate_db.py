@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from octofit_app.models import User, Team, Activity, Leaderboard, Workout
+from octofit_tracker.models import User, Team, Activity, Leaderboard, Workout
 from django.conf import settings
 from pymongo import MongoClient
 from datetime import timedelta
@@ -19,9 +19,6 @@ class Command(BaseCommand):
         db.activities.drop()
         db.leaderboard.drop()
         db.workouts.drop()
-
-        # Clear existing data in the User model
-        User.objects.all().delete()
 
         # Create users
         users = [
