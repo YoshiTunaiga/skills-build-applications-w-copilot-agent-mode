@@ -20,6 +20,9 @@ class Command(BaseCommand):
         db.leaderboard.drop()
         db.workouts.drop()
 
+        # Clear existing data in the User model
+        User.objects.all().delete()
+
         # Create users
         users = [
             User(_id=ObjectId(), username='thundergod', email='thundergod@mhigh.edu', password='thundergodpassword'),
@@ -33,11 +36,14 @@ class Command(BaseCommand):
         # Create teams
         teams = [
             Team(_id=ObjectId(), name='Blue Team'),
-            Team(_id=ObjectId(), name='Gold Team')
+            Team(_id=ObjectId(), name='Gold Team'),
         ]
         Team.objects.bulk_create(teams)
+
+        # Assign users to teams
         for team in teams:
-            team.members.add(*users)
+            team.members = users  # Directly assign the list of users
+            team.save()
 
         # Create activities
         activities = [
